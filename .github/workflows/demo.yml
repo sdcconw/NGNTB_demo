@@ -41,7 +41,7 @@ jobs:
     - name: Vue build
       run: |
         cd code/packages/web-page
-        npm run bild
+        npm run build
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
