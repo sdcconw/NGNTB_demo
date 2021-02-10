@@ -1,0 +1,59 @@
+on:
+  workflow_dispatch:
+    inputs:
+      memo:
+        description: 'checkout branch'
+        required: true
+        default: 'master'
+  release:
+    types: [created]
+
+name: Deploy
+
+jobs:
+  webPage:
+    name: Deploy webPage frontend to GithubPage
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        repository: sdcconw/NGNTunnelBroker
+        path: code
+
+    - name: Cache node modules
+      uses: actions/cache@v1
+      with:
+        path: code/packages/web-page/node_modules
+        key: ${{ runner.OS }}-build-${{ hashFiles('code/packages/web-page/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-build-
+          ${{ runner.OS }}-
+
+    - name: node modules install
+      run: |
+        cd code/packages/web-page
+        npm install
+
+    - name: Vue build
+      run: |
+        cd code/packages/web-page
+        npm run bild
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: code/packages/web-page/dist
+
+    # - name: Discord Notify
+    #   uses: sarisia/actions-status-discord@v1
+    #   if: always()
+    #   with:
+    #     webhook: ${{ secrets.DISCORD_WEBHOOK }}
+    #     status: ${{ job.status }}
+    #     title: ${{ github.event.repository.name }}/NGNTunnelBroker-web-page ${{needs.start.outputs.build_number}}
+    #     description: ${{ github.event.inputs.memo }}
+    #     nofail: false
+    #     nodetail: false
+    #     username: GitHub Actions
