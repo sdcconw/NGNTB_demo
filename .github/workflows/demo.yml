@@ -4,7 +4,7 @@ on:
       branch:
         description: 'checkout branch'
         required: true
-        default: 'master'
+        default: 'main'
   release:
     types: [created]
 
@@ -15,9 +15,7 @@ jobs:
     name: Deploy webPage frontend to GithubPage
     runs-on: ubuntu-latest
     steps:
-    - uses: webfactory/ssh-agent@v0.2.0
-      with:
-          ssh-private-key: ${{ secrets.NGNTB_DEPLOY_SSHKEY }}
+
     - name: Checkout
       uses: actions/checkout@v2
       with:
