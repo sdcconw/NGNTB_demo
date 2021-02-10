@@ -1,7 +1,7 @@
 on:
   workflow_dispatch:
     inputs:
-      memo:
+      branch:
         description: 'checkout branch'
         required: true
         default: 'master'
@@ -19,6 +19,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: sdcconw/NGNTunnelBroker
+        ref: '${{ github.event.inputs.branch }}'
         path: code
 
     - name: Cache node modules
