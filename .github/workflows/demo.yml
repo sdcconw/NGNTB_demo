@@ -48,15 +48,16 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: code/packages/web-page/dist
+        cname: tb-demo.ngn.icu
 
-    # - name: Discord Notify
-    #   uses: sarisia/actions-status-discord@v1
-    #   if: always()
-    #   with:
-    #     webhook: ${{ secrets.DISCORD_WEBHOOK }}
-    #     status: ${{ job.status }}
-    #     title: ${{ github.event.repository.name }}/NGNTunnelBroker-web-page ${{needs.start.outputs.build_number}}
-    #     description: ${{ github.event.inputs.memo }}
-    #     nofail: false
-    #     nodetail: false
-    #     username: GitHub Actions
+    - name: Discord Notify
+      uses: sarisia/actions-status-discord@v1
+      if: always()
+      with:
+        webhook: ${{ secrets.DISCORD_WEBHOOK }}
+        status: ${{ job.status }}
+        title: NGNTunnelBroker-web-page
+        description: https://tb-demo.ngn.icu/
+        nofail: false
+        nodetail: false
+        username: GitHub Actions
